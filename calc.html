@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Авиационный Инженерный Расчетный Комплекс</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.net/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body { background-color: #f8f9fa; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        .card { border-radius: 12px; border: 1px solid rgba(0,0,0,0.08); }
+        .card-hover { transition: transform 0.2s ease, box-shadow 0.2s ease; cursor: pointer; }
+        .card-hover:hover { transform: translateY(-3px); box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1) !important; }
+        .nav-tabs .nav-link { color: #495057; font-weight: 500; border: none; border-bottom: 2px solid transparent; }
+        .nav-tabs .nav-link.active { color: #0d6efd; border-bottom: 2px solid #0d6efd; background: transparent; }
+        .symbol-input { font-weight: bold; width: 90px; }
+        .code-input { width: 110px; color: #d63384; }
+        .table > :not(caption) > * > * { padding: 0.6rem 0.5rem; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm mb-4">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand d-flex align-items-center" href="#" onclick="showHome()">
+                <i class="fa-solid fa-plane-departure me-2 fs-4"></i>
+                <span>Инженерный САПР <span class="badge bg-light text-primary fs-6 ms-2">АвиаРасчет</span></span>
+            </a>
+            <div class="d-flex text-light align-items-center">
+                <i class="fa-solid fa-calculator me-2"></i>
+                <span class="small opacity-75">Автономная Расчетная Система</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid px-4 pb-5">
+        <!-- Главное Меню Разделов -->
+        <div id="homeSection">
+            <div class="row mb-4">
+                <div class="col-12 text-center">
+                    <h1 class="fw-bold mb-2">Авиационный Инженерный Расчетный Портал</h1>
+                    <p class="text-secondary lead">Выберите модуль для выполнения прочностных и энергетических расчетов.</p>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <!-- Стойка Шасси -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100 shadow-sm card-hover" onclick="openModule('landing_gear')">
+                        <div class="card-body d-flex flex-column text-center p-4">
+                            <div class="rounded-circle bg-primary bg-opacity-10 text-primary p-3 mb-3 mx-auto" style="width: 70px; height: 70px;">
+                                <i class="fa-solid fa-plane-arrival fs-2"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">Стойка шасси</h5>
+                            <p class="card-text text-muted small flex-grow-1">Энергетический и прочностной расчет амортизационной стойки при посадке.</p>
+                            <button class="btn btn-primary w-100 fw-semibold rounded-pill mt-3">
+                                <i class="fa-solid fa-calculator me-1"></i> Перейти к расчету
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Крыло / Лонжерон -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100 shadow-sm card-hover" onclick="openModule('wing')">
+                        <div class="card-body d-flex flex-column text-center p-4">
+                            <div class="rounded-circle bg-success bg-opacity-10 text-success p-3 mb-3 mx-auto" style="width: 70px; height: 70px;">
+                                <i class="fa-solid fa-feather-pointed fs-2"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">Крыло / Лонжерон</h5>
+                            <p class="card-text text-muted small flex-grow-1">Изгибающие моменты, перерезывающие силы и напряжения в поясах.</p>
+                            <button class="btn btn-success w-100 fw-semibold rounded-pill mt-3">
+                                <i class="fa-solid fa-calculator me-1"></i> Перейти к расчету
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Стрингер -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100 shadow-sm card-hover" onclick="openModule('stringer')">
+                        <div class="card-body d-flex flex-column text-center p-4">
+                            <div class="rounded-circle bg-warning bg-opacity-10 text-warning p-3 mb-3 mx-auto" style="width: 70px; height: 70px;">
+                                <i class="fa-solid fa-bars-staggered fs-2"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">Стрингер</h5>
+                            <p class="card-text text-muted small flex-grow-1">Расчет местной устойчивости, сжатия и критических сил Эйлера.</p>
+                            <button class="btn btn-warning text-dark w-100 fw-semibold rounded-pill mt-3">
+                                <i class="fa-solid fa-calculator me-1"></i> Перейти к расчету
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Фюзеляж -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100 shadow-sm card-hover" onclick="openModule('fuselage')">
+                        <div class="card-body d-flex flex-column text-center p-4">
+                            <div class="rounded-circle bg-danger bg-opacity-10 text-danger p-3 mb-3 mx-auto" style="width: 70px; height: 70px;">
+                                <i class="fa-solid fa-ring fs-2"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">Фюзеляж</h5>
+                            <p class="card-text text-muted small flex-grow-1">Изгиб от хвостового оперения и избыточное давление в кабине.</p>
+                            <button class="btn btn-danger w-100 fw-semibold rounded-pill mt-3">
+                                <i class="fa-solid fa-calculator me-1"></i> Перейти к расчету
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Интерфейс Расчетов Калькулятора -->
+        <div id="calcSection" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <button class="btn btn-outline-secondary btn-sm" onclick="showHome()">
+                    <i class="fa-solid fa-arrow-left me-1"></i> Вернуться к меню
+                </button>
+                <h3 class="fw-bold m-0" id="moduleTitle">Расчет</h3>
+                <div></div>
+            </div>
+
+            <div class="row g-4">
+                <!-- Ввод данных и Редактирование Формул -->
+                <div class="col-lg-6">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-white py-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <ul class="nav nav-tabs card-header-tabs" id="calcTabs">
+                                    <li class="nav-item">
+                                        <button class="nav-link active" id="inputs-tab" data-bs-toggle="tab" data-bs-target="#inputs-pane" type="button"><i class="fa-solid fa-sliders me-1"></i> Исходные данные</button>
+                                    </li>
+                                    <li class="nav-item">
+                                        <button class="nav-link" id="formulas-tab" data-bs-toggle="tab" data-bs-target="#formulas-pane" type="button"><i class="fa-solid fa-square-root-variable me-1"></i> Формулы</button>
+                                    </li>
+                                </ul>
+                                <div>
+                                    <button class="btn btn-success btn-sm fw-bold me-1" onclick="calculateAll()"><i class="fa-solid fa-play me-1"></i> Пересчитать</button>
+                                    <button class="btn btn-outline-secondary btn-sm" onclick="resetToDefaults()" title="Сбросить"><i class="fa-solid fa-rotate-left"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active p-3" id="inputs-pane">
+                                    <div class="alert alert-info py-2 small mb-3">
+                                        <i class="fa-solid fa-circle-info me-1"></i> Изменяйте значения, символы и параметры прямо в таблице.
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover align-middle mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Символ</th>
+                                                    <th>Код</th>
+                                                    <th>Наименование</th>
+                                                    <th class="text-end">Значение</th>
+                                                    <th class="text-center">Ед.</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="inputsBody"></tbody>
+                                        </table>
+                                    </div>
+                                    <button class="btn btn-outline-primary btn-sm mt-3" onclick="addInputParam()"><i class="fa-solid fa-plus me-1"></i> Добавить параметр</button>
+                                </div>
+
+                                <div class="tab-pane fade p-3" id="formulas-pane">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover align-middle mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Символ</th>
+                                                    <th>Код</th>
+                                                    <th>Математическая формула</th>
+                                                    <th class="text-center">Ед.</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="formulasBody"></tbody>
+                                        </table>
+                                    </div>
+                                    <button class="btn btn-outline-primary btn-sm mt-3" onclick="addFormulaParam()"><i class="fa-solid fa-plus me-1"></i> Добавить формулу</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Результаты и График -->
+                <div class="col-lg-6">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold m-0"><i class="fa-solid fa-chart-line text-primary me-2"></i> Результаты расчетов</h5>
+                        <div>
+                            <button class="btn btn-outline-success btn-sm fw-semibold me-1" onclick="exportExcel()"><i class="fa-solid fa-file-excel me-1"></i> Excel (.xlsx)</button>
+                            <button class="btn btn-outline-danger btn-sm fw-semibold" onclick="exportPDF()"><i class="fa-solid fa-file-pdf me-1"></i> PDF (.pdf)</button>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Символ / Наименование</th>
+                                            <th>Формула</th>
+                                            <th class="text-end">Значение</th>
+                                            <th class="text-center">Ед.</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="resultsBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-white py-3">
+                            <h6 class="fw-bold m-0"><i class="fa-solid fa-chart-area me-1 text-primary"></i> График силовых параметров</h6>
+                        </div>
+                        <div class="card-body" style="height: 300px;">
+                            <canvas id="calcChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- External Libraries (Bootstrap, Chart.js, XLSX, jsPDF) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.net/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script>
+        const MODULES_CONFIG = {
+            landing_gear: {
+                title: "Расчет стойки шасси",
+                inputs: [
+                    { symbol: "m<sub>посад</sub>", key: "m_pos", label: "Посадочная масса самолета", value: 5000, unit: "кг", desc: "Полная масса" },
+                    { symbol: "n<sub>ст</sub>", key: "n_st", label: "Число основных стоек", value: 2, unit: "шт", desc: "Количество опор" },
+                    { symbol: "k<sub>нагр</sub>", key: "k_nagr", label: "Доля нагрузки на главные стойки", value: 0.85, unit: "ед.", desc: "Коэффициент" },
+                    { symbol: "V<sub>у</sub>", key: "V_y", label: "Вертикальная скорость снижения", value: 3.0, unit: "м/с", desc: "Скорость касания" },
+                    { symbol: "η<sub>ам</sub>", key: "eta_a", label: "КПД амортизатора", value: 0.80, unit: "ед.", desc: "КПД амортизации" },
+                    { symbol: "η<sub>пн</sub>", key: "eta_t", label: "КПД пневматика колеса", value: 0.47, unit: "ед.", desc: "КПД шины" },
+                    { symbol: "s<sub>пн</sub>", key: "s_pn", label: "Ход обжатия пневматика", value: 0.08, unit: "м", desc: "Обжатие шины" },
+                    { symbol: "p<sub>газ</sub>", key: "p_gas", label: "Давление газа в цилиндре", value: 12.0, unit: "МПа", desc: "Давление зарядки" },
+                    { symbol: "σ<sub>доп</sub>", key: "sigma_dop", label: "Допустимое напряжение", value: 450, unit: "МПа", desc: "Предел текучести" }
+                ],
+                formulas: [
+                    { symbol: "m<sub>стойки</sub>", key: "m_st", formula: "(m_pos * k_nagr) / n_st", unit: "кг", desc: "Масса на одну стойку" },
+                    { symbol: "E<sub>кин</sub>", key: "E_k", formula: "0.5 * m_st * (V_y ** 2)", unit: "Дж", desc: "Энергия удара" },
+                    { symbol: "n<sub>y</sub>", key: "n_y", formula: "1.0 + (V_y ** 2) / (2 * 9.81 * (eta_a * 0.25 + eta_t * s_pn))", unit: "ед.", desc: "Эксплуатационная перегрузка" },
+                    { symbol: "F<sub>макс</sub>", key: "F_max", formula: "m_st * 9.81 * n_y", unit: "Н", desc: "Максимальная сила" },
+                    { symbol: "S<sub>ход</sub>", key: "S_st", formula: "E_k / (eta_a * F_max)", unit: "м", desc: "Рабочий ход амортизатора" },
+                    { symbol: "D<sub>порш</sub>", key: "D_p", formula: "sqrt((4 * F_max) / (3.14159 * p_gas * 1e6))", unit: "м", desc: "Диаметр цилиндра" },
+                    { symbol: "t<sub>стенки</sub>", key: "t_st", formula: "(F_max * 1.5) / (3.14159 * D_p * (sigma_dop * 1e6))", unit: "м", desc: "Толщина стенки" },
+                    { symbol: "σ<sub>расч</sub>", key: "sigma_rasch", formula: "(F_max * 1.5) / (3.14159 * D_p * t_st) / 1e6", unit: "МПа", desc: "Расчетное напряжение" },
+                    { symbol: "η<sub>запас</sub>", key: "eta_zap", formula: "(sigma_dop / sigma_rasch) - 1.0", unit: "ед.", desc: "Запас прочности" }
+                ]
+            },
+            wing: {
+                title: "Расчет крыла / лонжерона",
+                inputs: [
+                    { symbol: "M<sub>взл</sub>", key: "m_takeoff", label: "Взлетная масса самолета", value: 12000, unit: "кг", desc: "Взлетная масса" },
+                    { symbol: "n<sub>y</sub>", key: "n_y_exp", label: "Эксплуатационная перегрузка", value: 2.5, unit: "ед.", desc: "Перегрузка" },
+                    { symbol: "f<sub>без</sub>", key: "f_safety", label: "Коэффициент безопасности", value: 1.5, unit: "ед.", desc: "Коэффициент" },
+                    { symbol: "L<sub>крыла</sub>", key: "L_wing", label: "Размах консоли крыла", value: 8.5, unit: "м", desc: "Длина консоли" },
+                    { symbol: "H<sub>лонж</sub>", key: "H_spar", label: "Высота сечения лонжерона", value: 0.25, unit: "м", desc: "Высота лонжерона" },
+                    { symbol: "F<sub>пояс</sub>", key: "F_belt", label: "Площадь сечения пояса", value: 0.0012, unit: "м²", desc: "Площадь пояса" },
+                    { symbol: "σ<sub>доп</sub>", key: "sigma_allow", label: "Допустимое напряжение", value: 400, unit: "МПа", desc: "Допустимое напряжение" }
+                ],
+                formulas: [
+                    { symbol: "P<sub>расч</sub>", key: "P_calc", formula: "m_takeoff * 9.81 * n_y_exp * f_safety / 2", unit: "Н", desc: "Подъемная сила консоли" },
+                    { symbol: "q<sub>крыла</sub>", key: "q_wing", formula: "P_calc / L_wing", unit: "Н/м", desc: "Погонная нагрузка" },
+                    { symbol: "Q<sub>макс</sub>", key: "Q_max", formula: "P_calc", unit: "Н", desc: "Перерезывающая сила" },
+                    { symbol: "M<sub>изг</sub>", key: "M_bend", formula: "P_calc * (L_wing / 2)", unit: "Н·м", desc: "Изгибающий момент" },
+                    { symbol: "σ<sub>пояс</sub>", key: "sigma_belt", formula: "(M_bend / (H_spar * F_belt)) / 1e6", unit: "МПа", desc: "Напряжение в поясах" },
+                    { symbol: "η<sub>запас</sub>", key: "margin", formula: "(sigma_allow / sigma_belt) - 1.0", unit: "ед.", desc: "Запас прочности" }
+                ]
+            },
+            stringer: {
+                title: "Расчет стрингера",
+                inputs: [
+                    { symbol: "P<sub>сж</sub>", key: "P_comp", label: "Сжимающая сила на стрингер", value: 45000, unit: "Н", desc: "Сжимающая сила" },
+                    { symbol: "L<sub>шпанг</sub>", key: "L_frame", label: "Расстояние между шпангоутами", value: 0.50, unit: "м", desc: "Длина стрингера" },
+                    { symbol: "A<sub>ст</sub>", key: "A_str", label: "Площадь сечения стрингера", value: 0.00018, unit: "м²", desc: "Площадь профиля" },
+                    { symbol: "I<sub>мин</sub>", key: "I_min", label: "Минимальный момент инерции", value: 1.2e-8, unit: "м⁴", desc: "Момент инерции" },
+                    { symbol: "E<sub>мат</sub>", key: "E_mod", label: "Модуль упругости (E)", value: 71000, unit: "МПа", desc: "Модуль Юнга" }
+                ],
+                formulas: [
+                    { symbol: "σ<sub>сж</sub>", key: "sigma_comp", formula: "(P_comp / A_str) / 1e6", unit: "МПа", desc: "Сжимающее напряжение" },
+                    { symbol: "P<sub>эйлер</sub>", key: "P_euler", formula: "(3.14159 ** 2) * (E_mod * 1e6) * I_min / (L_frame ** 2)", unit: "Н", desc: "Сила Эйлера" },
+                    { symbol: "σ<sub>крит</sub>", key: "sigma_crit", formula: "(P_euler / A_str) / 1e6", unit: "МПа", desc: "Критическое напряжение" },
+                    { symbol: "K<sub>устойч</sub>", key: "k_stab", formula: "sigma_crit / sigma_comp", unit: "ед.", desc: "Коэффициент устойчивости" }
+                ]
+            },
+            fuselage: {
+                title: "Расчет фюзеляжа",
+                inputs: [
+                    { symbol: "P<sub>опер</sub>", key: "P_tail", label: "Нагрузка на оперение", value: 35000, unit: "Н", desc: "Сила на оперение" },
+                    { symbol: "L<sub>плечо</sub>", key: "L_tail", label: "Плечо оперения", value: 12.0, unit: "м", desc: "Плечо силы" },
+                    { symbol: "R<sub>фюз</sub>", key: "R_fus", label: "Радиус шпангоута", value: 1.8, unit: "м", desc: "Радиус фюзеляжа" },
+                    { symbol: "δ<sub>обш</sub>", key: "delta_skin", label: "Толщина обшивки", value: 0.0015, unit: "м", desc: "Толщина обшивки" },
+                    { symbol: "p<sub>изб</sub>", key: "p_over", label: "Избыточное давление", value: 0.06, unit: "МПа", desc: "Перепад давления" }
+                ],
+                formulas: [
+                    { symbol: "M<sub>изг</sub>", key: "M_tail", formula: "P_tail * L_tail", unit: "Н·м", desc: "Изгибающий момент" },
+                    { symbol: "W<sub>фюз</sub>", key: "W_fus", formula: "3.14159 * (R_fus ** 2) * delta_skin", unit: "м³", desc: "Момент сопротивления" },
+                    { symbol: "σ<sub>изг</sub>", key: "sigma_bend", formula: "(M_tail / W_fus) / 1e6", unit: "МПа", desc: "Напряжение изгиба" },
+                    { symbol: "σ<sub>кольц</sub>", key: "sigma_hoop", formula: "(p_over * R_fus / delta_skin)", unit: "МПа", desc: "Кольцевое напряжение" },
+                    { symbol: "σ<sub>сум</sub>", key: "sigma_total", formula: "sigma_bend + sigma_hoop", unit: "МПа", desc: "Суммарное напряжение" }
+                ]
+            }
+        };
+
+        class ASTEvaluator {
+            static evaluate(expr, scope) {
+                let jsExpr = expr.replace(/\^/g, "**")
+                                 .replace(/\bsqrt\b/g, "Math.sqrt")
+                                 .replace(/\bsin\b/g, "Math.sin")
+                                 .replace(/\bcos\b/g, "Math.cos")
+                                 .replace(/\babs\b/g, "Math.abs")
+                                 .replace(/\bpi\b/g, "Math.PI");
+
+                const keys = Object.keys(scope).sort((a, b) => b.length - a.length);
+                for (const k of keys) {
+                    const regex = new RegExp(`\\b${k}\\b`, "g");
+                    jsExpr = jsExpr.replace(regex, `(${scope[k]})`);
+                }
+
+                const fn = new Function(`return (${jsExpr});`);
+                const res = fn();
+                if (typeof res !== 'number' || isNaN(res) || !isFinite(res)) throw new Error(" Ошибка ");
+                return res;
+            }
+        }
+
+        let currentModuleKey = "landing_gear";
+        let currentInputs = [];
+        let currentFormulas = [];
+        let calculationResults = [];
+        let chartInstance = null;
+
+        function showHome() {
+            document.getElementById("homeSection").style.display = "block";
+            document.getElementById("calcSection").style.display = "none";
+        }
+
+        function openModule(moduleKey) {
+            currentModuleKey = moduleKey;
+            document.getElementById("homeSection").style.display = "none";
+            document.getElementById("calcSection").style.display = "block";
+
+            const modConfig = MODULES_CONFIG[moduleKey];
+            document.getElementById("moduleTitle").innerText = modConfig.title;
+
+            currentInputs = JSON.parse(JSON.stringify(modConfig.inputs));
+            currentFormulas = JSON.parse(JSON.stringify(modConfig.formulas));
+
+            renderInputsTable();
+            renderFormulasTable();
+            calculateAll();
+        }
+
+        function renderInputsTable() {
+            const tbody = document.getElementById("inputsBody");
+            tbody.innerHTML = "";
+            currentInputs.forEach((inp, idx) => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td><input type="text" class="form-control form-control-sm symbol-input" value="${inp.symbol}" onchange="updateInput(${idx}, 'symbol', this.value)"></td>
+                    <td><input type="text" class="form-control form-control-sm code-input font-monospace" value="${inp.key}" onchange="updateInput(${idx}, 'key', this.value)"></td>
+                    <td><input type="text" class="form-control form-control-sm" value="${inp.label}" onchange="updateInput(${idx}, 'label', this.value)"></td>
+                    <td><input type="number" step="any" class="form-control form-control-sm text-end fw-bold" value="${inp.value}" onchange="updateInput(${idx}, 'value', parseFloat(this.value))"></td>
+                    <td><input type="text" class="form-control form-control-sm text-center" style="width:60px" value="${inp.unit}" onchange="updateInput(${idx}, 'unit', this.value)"></td>
+                    <td class="text-center"><button class="btn btn-outline-danger btn-sm" onclick="removeInput(${idx})"><i class="fa-solid fa-trash"></i></button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderFormulasTable() {
+            const tbody = document.getElementById("formulasBody");
+            tbody.innerHTML = "";
+            currentFormulas.forEach((form, idx) => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td><input type="text" class="form-control form-control-sm symbol-input" value="${form.symbol}" onchange="updateFormula(${idx}, 'symbol', this.value)"></td>
+                    <td><input type="text" class="form-control form-control-sm code-input font-monospace" value="${form.key}" onchange="updateFormula(${idx}, 'key', this.value)"></td>
+                    <td><input type="text" class="form-control form-control-sm font-monospace" value="${form.formula}" onchange="updateFormula(${idx}, 'formula', this.value)"></td>
+                    <td><input type="text" class="form-control form-control-sm text-center" style="width:60px" value="${form.unit}" onchange="updateFormula(${idx}, 'unit', this.value)"></td>
+                    <td class="text-center"><button class="btn btn-outline-danger btn-sm" onclick="removeFormula(${idx})"><i class="fa-solid fa-trash"></i></button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function updateInput(idx, field, val) { currentInputs[idx][field] = val; calculateAll(); }
+        function updateFormula(idx, field, val) { currentFormulas[idx][field] = val; calculateAll(); }
+        function removeInput(idx) { currentInputs.splice(idx, 1); renderInputsTable(); calculateAll(); }
+        function removeFormula(idx) { currentFormulas.splice(idx, 1); renderFormulasTable(); calculateAll(); }
+
+        function addInputParam() {
+            currentInputs.push({ symbol: "X<sub>нов</sub>", key: `x_new_${currentInputs.length + 1}`, label: "Новый параметр", value: 1.0, unit: "ед.", desc: "Параметр" });
+            renderInputsTable(); calculateAll();
+        }
+
+        function addFormulaParam() {
+            currentFormulas.push({ symbol: "Y<sub>расч</sub>", key: `y_calc_${currentFormulas.length + 1}`, formula: "1.0", unit: "ед.", desc: "Формула" });
+            renderFormulasTable(); calculateAll();
+        }
+
+        function resetToDefaults() { openModule(currentModuleKey); }
+
+        function calculateAll() {
+            const scope = {};
+            currentInputs.forEach(inp => { scope[inp.key] = parseFloat(inp.value) || 0.0; });
+
+            calculationResults = [];
+            const resultsBody = document.getElementById("resultsBody");
+            resultsBody.innerHTML = "";
+
+            currentFormulas.forEach(form => {
+                let val = 0; let isErr = false;
+                try {
+                    val = ASTEvaluator.evaluate(form.formula, scope);
+                    scope[form.key] = val;
+                } catch (e) { isErr = true; }
+
+                const displayVal = isErr ? `<span class="badge bg-danger">Ошибка</span>` : (Math.abs(val) < 0.001 || Math.abs(val) > 100000 ? val.toExponential(4) : val.toFixed(4));
+
+                calculationResults.push({ symbol: form.symbol, formula: form.formula, label: form.desc || form.symbol, unit: form.unit, value: val });
+
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td><div class="fw-bold">${form.desc || form.symbol}</div><div class="text-muted small">${form.symbol} <code>(${form.key})</code></div></td>
+                    <td><code class="text-dark bg-light px-2 py-1 rounded">${form.formula}</code></td>
+                    <td class="text-end fw-bold text-primary fs-5">${displayVal}</td>
+                    <td class="text-center text-muted">${form.unit}</td>
+                `;
+                resultsBody.appendChild(tr);
+            });
+
+            updateChart(scope);
+        }
+
+        function updateChart(scope) {
+            const ctx = document.getElementById("calcChart").getContext("2d");
+            const labels = [];
+            const dataPoints = [];
+
+            if (currentModuleKey === "landing_gear") {
+                const S_st = scope["S_st"] || 0.2;
+                const F_max = scope["F_max"] || 50000;
+                const eta_a = scope["eta_a"] || 0.8;
+                for (let i = 0; i <= 20; i++) {
+                    const x = (S_st * i) / 20.0;
+                    const normX = S_st > 0 ? x / S_st : 0;
+                    const y = (F_max * Math.pow(normX, 0.7) * eta_a) / 1000.0;
+                    labels.push((x * 1000).toFixed(0));
+                    dataPoints.push(y.toFixed(2));
+                }
+            } else {
+                const baseVal = scope[currentFormulas[0]?.key] || 100;
+                for (let i = 0; i <= 20; i++) {
+                    labels.push(`${i * 5}%`);
+                    dataPoints.push(((baseVal * (1 + 0.05 * i)) / 1000.0).toFixed(2));
+                }
+            }
+
+            if (chartInstance) chartInstance.destroy();
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Силовая характеристика (кН)',
+                        data: dataPoints,
+                        borderColor: '#0d6efd',
+                        backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+
+        function exportExcel() {
+            const wb = XLSX.utils.book_new();
+            const inputsData = [["Символ", "Код", "Наименование", "Значение", "Ед."]];
+            currentInputs.forEach(i => inputsData.push([i.symbol.replace(/<[^>]*>/g, ''), i.key, i.label, i.value, i.unit]));
+            XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(inputsData), "Исходные данные");
+
+            const resultsData = [["Наименование", "Формула", "Значение", "Ед."]];
+            calculationResults.forEach(r => resultsData.push([r.label.replace(/<[^>]*>/g, ''), r.formula, r.value, r.unit]));
+            XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(resultsData), "Результаты");
+
+            XLSX.writeFile(wb, `${currentModuleKey}_отчет.xlsx`);
+        }
+
+        function exportPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.setFontSize(16);
+            doc.text(`Отчет: ${MODULES_CONFIG[currentModuleKey].title}`, 14, 20);
+            doc.setFontSize(10);
+            doc.text(`Дата: ${new Date().toLocaleString()}`, 14, 28);
+
+            let y = 38;
+            calculationResults.forEach(r => {
+                doc.text(`${r.label.replace(/<[^>]*>/g, '')}: ${r.value.toFixed(4)} ${r.unit}`, 14, y);
+                y += 7;
+            });
+            doc.save(`${currentModuleKey}_отчет.pdf`);
+        }
+    </script>
+</body>
+</html>
