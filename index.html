@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кинематика управления самолетом</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-blueprint">
+    <div id="app">
+        <header>
+            <h1>Схема кинематики управления</h1>
+            <div class="controls">
+                <label for="theme-select">Фон:</label>
+                <select id="theme-select">
+                    <option value="theme-blueprint">Синий чертеж</option>
+                    <option value="theme-dark">Темный</option>
+                    <option value="theme-light">Светлый</option>
+                </select>
+                <button id="export-csv">Экспорт в CSV</button>
+                <button id="export-png">Экспорт в PNG</button>
+            </div>
+        </header>
+        <div id="main-container">
+            <aside id="left-panel">
+                <h3>Инструменты</h3>
+                <button class="tool-btn active" data-tool="select">Выбор / Перемещение</button>
+                <button class="tool-btn" data-tool="add-pivot">Добавить опору (земля)</button>
+                <button class="tool-btn" data-tool="add-node">Добавить свободный шарнир</button>
+                <button class="tool-btn" data-tool="add-link">Добавить тягу (связать шарниры)</button>
+                <button class="tool-btn" data-tool="add-bellcrank">Добавить качалку (3 узла)</button>
+                <button class="tool-btn" data-tool="add-stick">Добавить РУС</button>
+                <button class="tool-btn" data-tool="add-elevator">Добавить РВ</button>
+
+                <hr style="margin: 10px 0;">
+                <h3>Режим</h3>
+                <div class="mode-switch">
+                    <label style="display: block; margin-bottom: 5px;">
+                        <input type="radio" name="mode" value="edit" checked> Редактирование
+                    </label>
+                    <label style="display: block;">
+                        <input type="radio" name="mode" value="sim"> Симуляция
+                    </label>
+                </div>
+
+                <div id="sim-controls" style="display: none; margin-top: 15px;">
+                    <label for="sim-slider" style="display: block; margin-bottom: 5px;">Положение РУС:</label>
+                    <input type="range" id="sim-slider" min="-30" max="30" value="0" style="width: 100%;">
+                    <button id="play-sim" style="width: 100%; margin-top: 10px;">Воспроизвести</button>
+                </div>
+            </aside>
+
+            <main id="canvas-container">
+                <canvas id="canvas"></canvas>
+            </main>
+
+            <aside id="right-panel">
+                <h3>Свойства</h3>
+                <div id="properties-content">
+                    <p style="font-size: 0.9em; color: #555;">Выберите элемент на схеме, чтобы увидеть и изменить его свойства.</p>
+                </div>
+            </aside>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
